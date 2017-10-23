@@ -44,38 +44,74 @@ namespace TrainInformation
             }
         }
 
-        public int GetDistanceOfRouteWith(char[] stops)
+        public object GetDistanceOfRouteWith(params char[] stops)
         {
-            var totalDistance = 0;
-            for (var i = 0; i < stops.Length - 1; i++)
+            try
             {
-                totalDistance += RoutesGraph.GetDistanceOf(stops[i], stops[i + 1]);
+                var totalDistance = 0;
+                for (var i = 0; i < stops.Length - 1; i++)
+                {
+                    totalDistance += RoutesGraph.GetDistanceOf(stops[i], stops[i + 1]);
+                }
+                return totalDistance;
             }
-            return totalDistance;
-        }
-
-        public int GetDistanceOfShortestRoute(char startTown, char endTown)
-        {
-            if (startTown == endTown)
+            catch (Exception ex)
             {
-                return RoutesGraph.GetDistanceOfShortestLoop(startTown);
+                return ex.Message;
             }
-            return RoutesGraph.GetDistanceOfShortestRoute(startTown, endTown);
         }
 
-        public int GetNumberOfTripsWithMaxStops(char startTown, char endTown, int maxStops)
+        public object GetDistanceOfShortestRoute(char startTown, char endTown)
         {
-            return RoutesGraph.GetNumberOfTripsWithMaxStops(startTown, endTown, maxStops);
+            try
+            {
+                if (startTown == endTown)
+                {
+                    return RoutesGraph.GetDistanceOfShortestLoop(startTown);
+                }
+                return RoutesGraph.GetDistanceOfShortestRoute(startTown, endTown);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
-        public int GetNumberOfTripsWithExactStops(char startTown, char endTown, int exactStops)
+        public object GetNumberOfTripsWithMaxStops(char startTown, char endTown, int maxStops)
         {
-            return RoutesGraph.GetNumberOfTripsWithExactStops(startTown, endTown, exactStops);
+            try
+            {
+                return RoutesGraph.GetNumberOfTripsWithMaxStops(startTown, endTown, maxStops);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
         }
 
-        public int GetNumberOfTripsWithMaxDistance(char startTown, char endTown, int maxDistance)
+        public object GetNumberOfTripsWithExactStops(char startTown, char endTown, int exactStops)
         {
-            return RoutesGraph.GetNumberOfTripsWithMaxDistance(startTown, endTown, maxDistance);
+            try
+            {
+                return RoutesGraph.GetNumberOfTripsWithExactStops(startTown, endTown, exactStops);
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public object GetNumberOfTripsWithMaxDistance(char startTown, char endTown, int maxDistance)
+        {
+            try
+            {
+                return RoutesGraph.GetNumberOfTripsWithMaxDistance(startTown, endTown, maxDistance);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+           
         }
     }
 }

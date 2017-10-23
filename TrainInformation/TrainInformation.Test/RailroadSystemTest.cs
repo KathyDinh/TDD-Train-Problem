@@ -71,7 +71,7 @@ namespace TrainInformation.Test
 
         //Question 5
         [Test]
-        public void GetDistanceOfRoute_ShouldThrowExceptionIfNoRouteExists()
+        public void GetDistanceOfRoute_ShouldReturnMessageIfNoRouteExists()
         {
             var routeInfo = new[]
             {
@@ -83,9 +83,8 @@ namespace TrainInformation.Test
 
             var stops = new [] {'A', 'E', 'D'};
 
-            var exception = Assert.Throws<RailRoadSystemException>(() => target.GetDistanceOfRouteWith(stops));
-            Assert.That(exception.exceptionType, Is.EqualTo(RailRoadSystemExceptionType.NoRouteExists));
-            Assert.That(exception.Message, Is.EqualTo("NO SUCH ROUTE"));
+            var actual =  target.GetDistanceOfRouteWith(stops);
+            Assert.That(actual, Is.EqualTo("NO SUCH ROUTE"));
         }
 
         //Question 6

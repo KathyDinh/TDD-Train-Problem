@@ -12,10 +12,32 @@ namespace TrainInformation
             {
                 if (!TryGetFileName(out var fileName)) return;
 
-                //todo: try catch
-                var routes = GetTrainRouteInfoFromFile(fileName);
-                var railroadSystem = new RailroadSystem();
-                railroadSystem.BuildRoutesGraphWith(routes);
+                try
+                {
+                    var routes = GetTrainRouteInfoFromFile(fileName);
+                    var railroadSystem = new RailroadSystem();
+                    railroadSystem.BuildRoutesGraphWith(routes);
+
+                    Console.WriteLine($"Output #1: {railroadSystem.GetDistanceOfRouteWith('A', 'B', 'C')}");
+                    Console.WriteLine($"Output #2: {railroadSystem.GetDistanceOfRouteWith('A', 'D')}");
+                    Console.WriteLine($"Output #3: {railroadSystem.GetDistanceOfRouteWith('A', 'D', 'C')}");
+                    Console.WriteLine($"Output #4: {railroadSystem.GetDistanceOfRouteWith('A', 'E', 'B', 'C', 'D')}");
+                    Console.WriteLine($"Output #5: {railroadSystem.GetDistanceOfRouteWith('A', 'E', 'D')}");
+                    Console.WriteLine($"Output #6: {railroadSystem.GetNumberOfTripsWithMaxStops('C', 'C', 3)}");
+                    Console.WriteLine($"Output #7: {railroadSystem.GetNumberOfTripsWithExactStops('A', 'C', 4)}");
+                    Console.WriteLine($"Output #8: {railroadSystem.GetDistanceOfShortestRoute('A', 'C')}");
+                    Console.WriteLine($"Output #9: {railroadSystem.GetDistanceOfShortestRoute('B', 'B')}");
+                    Console.WriteLine($"Output #10: {railroadSystem.GetNumberOfTripsWithMaxDistance('C', 'C', 30)}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error has occur: {ex.Message}");
+                    Console.WriteLine(ex.StackTrace);
+                }
+                finally
+                {
+                    Console.WriteLine();
+                }
             }
         }
 
