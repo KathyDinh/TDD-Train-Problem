@@ -67,5 +67,10 @@ namespace TrainInformation
         {
             return RoutesGraph.GetNumberOfTripsWithMaxStops(startTown, endTown, maxStops);
         }
+
+        public int GetNumberOfTripsWithExactStops(char startTown, char endTown, int exactStops)
+        {
+            return RoutesGraph.GetNumberOfTripsWithExactStops(startTown, endTown, exactStops);
+        }
     }
 }

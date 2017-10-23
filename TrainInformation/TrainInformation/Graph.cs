@@ -198,14 +198,52 @@ namespace TrainInformation
             while (queue.Count != 0)
             {
                 var currentTown = queue.Dequeue();
-                if (currentTown == endTown)
+
+                var currentStopCountPair = stopCount.Find((pair) => pair.Key == currentTown);
+                stopCount.Remove(currentStopCountPair);
+                var currentStopCount = currentStopCountPair.Value;
+
+                if (currentTown == endTown && currentStopCount > 0)
                 {
                     tripCount++;
                 }
 
-                var currentStopCount = stopCount.FindLast((pair) => pair.Key == currentTown).Value;
-
                 if (currentStopCount == maxStops)
+                {
+                    continue;
+                }
+
+                foreach (var neighbor in GetNeighborsOf(currentTown))
+                {
+                    queue.Enqueue(neighbor);
+                    stopCount.Add(new KeyValuePair<char, int>(neighbor, currentStopCount + 1));
+                }
+            }
+            return tripCount;
+        }
+
+        public int GetNumberOfTripsWithExactStops(char startTown, char endTown, int exactStops)
+        {
+            var queue = new Queue<char>();
+            var stopCount = new List<KeyValuePair<char, int>>();
+            var tripCount = 0;
+
+            queue.Enqueue(startTown);
+            stopCount.Add(new KeyValuePair<char, int>(startTown, 0));
+
+            while (queue.Count != 0)
+            {
+                var currentTown = queue.Dequeue();
+                var currentStopCountPair = stopCount.Find((pair) => pair.Key == currentTown);
+                stopCount.Remove(currentStopCountPair);
+                var currentStopCount = currentStopCountPair.Value;
+
+                if (currentTown == endTown && currentStopCount == exactStops)
+                {
+                    tripCount++;
+                }
+
+                if (currentStopCount == exactStops)
                 {
                     continue;
                 }

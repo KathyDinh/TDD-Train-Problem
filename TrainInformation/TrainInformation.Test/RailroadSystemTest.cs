@@ -109,6 +109,27 @@ namespace TrainInformation.Test
             Assert.That(actual, Is.EqualTo(expected));
         }
 
+        //Question 7
+        [Test]
+        public void GetNumberOfTripsWithExactStops_ShouldReturCorrectValue()
+        {
+            var routeInfo = new[]
+            {
+                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
+            };
+
+            var target = new RailroadSystem();
+            target.BuildRoutesGraphWith(routeInfo);
+
+            var startTown = 'A';
+            var endTown = 'C';
+            var exactStops = 4;
+            var expected = 3;
+
+            var actual = target.GetNumberOfTripsWithExactStops(startTown, endTown, exactStops);
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
         //Question 8
         [Test]
         public void GetDistanceOfShortestRoute_IfStartTownAndEndTownAreDifferentShouldReturnCorrectValue()
