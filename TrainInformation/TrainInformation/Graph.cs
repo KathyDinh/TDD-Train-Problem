@@ -256,5 +256,42 @@ namespace TrainInformation
             }
             return tripCount;
         }
+
+        public int GetNumberOfTripsWithMaxDistance(char startTown, char endTown, int maxDistance)
+        {
+            var queue = new Queue<char>();
+            var totalDistance = new List<KeyValuePair<char, int>>();
+            var tripCount = 0;
+
+            queue.Enqueue(startTown);
+            totalDistance.Add(new KeyValuePair<char, int>(startTown, 0));
+
+            while (queue.Count != 0)
+            {
+                var currentTown = queue.Dequeue();
+
+                var currentTotalDistancePair = totalDistance.Find((pair) => pair.Key == currentTown);
+                totalDistance.Remove(currentTotalDistancePair);
+                var currentTotalDistance = currentTotalDistancePair.Value;
+
+                if (currentTown == endTown && currentTotalDistance > 0 && currentTotalDistance < maxDistance)
+                {
+                    tripCount++;
+                }
+
+                if (currentTotalDistance >= maxDistance)
+                {
+                    continue;
+                }
+
+                foreach (var neighbor in GetNeighborsOf(currentTown))
+                {
+                    var currentDistance = GetDistanceOf(currentTown, neighbor);
+                    queue.Enqueue(neighbor);
+                    totalDistance.Add(new KeyValuePair<char, int>(neighbor, currentTotalDistance + currentDistance));
+                }
+            }
+            return tripCount;
+        }
     }
 }
