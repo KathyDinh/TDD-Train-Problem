@@ -62,5 +62,10 @@ namespace TrainInformation
             }
             return RoutesGraph.GetDistanceOfShortestRoute(startTown, endTown);
         }
+
+        public int GetNumberOfTripsWithMaxStops(char startTown, char endTown, int maxStops)
+        {
+            return RoutesGraph.GetNumberOfTripsWithMaxStops(startTown, endTown, maxStops);
+        }
     }
 }

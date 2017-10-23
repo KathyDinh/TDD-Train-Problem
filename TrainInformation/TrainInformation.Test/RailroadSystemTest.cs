@@ -88,7 +88,28 @@ namespace TrainInformation.Test
             Assert.That(exception.Message, Is.EqualTo("NO SUCH ROUTE"));
         }
 
-        //Q8
+        //Question 6
+        [Test]
+        public void GetNumberOfTripsWithMaxStops_ShouldReturCorrectValue()
+        {
+            var routeInfo = new[]
+            {
+                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
+            };
+
+            var target = new RailroadSystem();
+            target.BuildRoutesGraphWith(routeInfo);
+
+            var startTown = 'C';
+            var endTown = 'C';
+            var maxStops = 3;
+            var expected = 2;
+
+            var actual = target.GetNumberOfTripsWithMaxStops(startTown, endTown, maxStops);
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        //Question 8
         [Test]
         public void GetDistanceOfShortestRoute_IfStartTownAndEndTownAreDifferentShouldReturnCorrectValue()
         {
@@ -109,7 +130,7 @@ namespace TrainInformation.Test
             Assert.That(actual, Is.EqualTo(expected));
         }
 
-        //Q9
+        //Question 9
         [Test]
         public void GetDistanceOfShortestRoute_IfStartTownAndEndTownAreSameShouldReturnCorrectValue()
         {

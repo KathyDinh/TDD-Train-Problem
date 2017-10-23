@@ -185,5 +185,38 @@ namespace TrainInformation
             }
             return route_distance[endTown];
         }
+
+        public int GetNumberOfTripsWithMaxStops(char startTown, char endTown, int maxStops)
+        {
+            var queue = new Queue<char>();
+            var stopCount = new List<KeyValuePair<char, int>>();
+            var tripCount = 0;
+            
+            queue.Enqueue(startTown);
+            stopCount.Add(new KeyValuePair<char, int>(startTown, 0));
+
+            while (queue.Count != 0)
+            {
+                var currentTown = queue.Dequeue();
+                if (currentTown == endTown)
+                {
+                    tripCount++;
+                }
+
+                var currentStopCount = stopCount.FindLast((pair) => pair.Key == currentTown).Value;
+
+                if (currentStopCount == maxStops)
+                {
+                    continue;
+                }
+
+                foreach (var neighbor in GetNeighborsOf(currentTown))
+                {
+                    queue.Enqueue(neighbor);
+                    stopCount.Add(new KeyValuePair<char, int>(neighbor, currentStopCount + 1));
+                }
+            }
+            return tripCount;
+        }
     }
 }
