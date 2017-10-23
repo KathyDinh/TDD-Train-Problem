@@ -18,8 +18,7 @@ namespace TrainInformation
             List<DirectedEdge> edgesFromVertex;
             if (!adjacencyList.TryGetValue(vertex, out edgesFromVertex))
             {
-                throw new RailRoadSystemException(RailRoadSystemExceptionType.NoTownExists
-                    ,$"Town {vertex} does not exist");
+                return new List<char>();  
             }
 
             List<char> neighbors = new List<char>();
@@ -53,10 +52,23 @@ namespace TrainInformation
             List<DirectedEdge> edgesFromStartVertex;
             if (!adjacencyList.TryGetValue(startVertex, out edgesFromStartVertex))
             {
-                throw new RailRoadSystemException(RailRoadSystemExceptionType.NoEdgeExists
-                    , $"There is no edges starting from {startVertex}");
+                return new List<DirectedEdge>();
             }
             return edgesFromStartVertex;
+        }
+
+        public int GetWeightOf(char startVertex, char endVertex)
+        {
+            var edgesFromStartVertex = GetEdgesFrom(startVertex);
+            foreach (var edge in edgesFromStartVertex)
+            {
+                if (edge.EndVertex == endVertex)
+                {
+                    return edge.Weight;
+                }
+            }
+
+            return -1;
         }
     }
 }

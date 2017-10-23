@@ -41,5 +41,15 @@ namespace TrainInformation
                 RoutesGraph.AddOneWayRoute(startTown, endTown, distance);
             }
         }
+
+        public int GetDistanceOfRouteWith(char[] stops)
+        {
+            var totalDistance = 0;
+            for (var i = 0; i < stops.Length - 1; i++)
+            {
+                totalDistance += RoutesGraph.GetDistanceOf(stops[i], stops[i + 1]);
+            }
+            return totalDistance;
+        }
     }
 }

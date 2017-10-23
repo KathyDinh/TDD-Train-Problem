@@ -13,7 +13,7 @@ namespace TrainInformation
 
     internal enum RailRoadSystemExceptionType
     {
-        NoEdgeExists,
-        NoTownExists
+        NoRouteExists,
+        NoNeightborExists
     }
 }

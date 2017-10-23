@@ -26,13 +26,14 @@ namespace TrainInformation.Test
         }
 
         [Test]
-        public void GetEdgesFrom_ShoudldThrowExceptionIfThereIsNoEdge()
+        public void GetEdgesFrom_ShoudldReturnEmptyLisIfThereIsNoEdge()
         {
             var startVertex = 'B';
 
             var target = new AdjacencyList();
-            var exception = Assert.Throws<RailRoadSystemException>(() => target.GetEdgesFrom(startVertex));
-            Assert.That(exception.exceptionType, Is.EqualTo(RailRoadSystemExceptionType.NoEdgeExists));
+            var actual = target.GetEdgesFrom(startVertex);
+
+            Assert.That(actual.Count, Is.EqualTo(0));
         }
 
         [Test]
