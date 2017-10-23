@@ -171,5 +171,27 @@ namespace TrainInformation.Test
 
             Assert.That(actual, Is.EqualTo(expected));
         }
+
+        //Question 10
+        [Test]
+        public void GetNumberOfTripsWithMaxDistance_ShouldReturnCorrectValue()
+        {
+            var routeInfo = new[]
+            {
+                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
+            };
+
+            var target = new RailroadSystem();
+            target.BuildRoutesGraphWith(routeInfo);
+
+            var startTown = 'C';
+            var endTown = 'C';
+            var maxDistance = 30;
+            var expected = 7;
+
+            var actual = target.GetNumberOfTripsWithMaxDistance(startTown, endTown, maxDistance);
+
+            Assert.That(actual, Is.EqualTo(expected));
+        }
     }
 }
