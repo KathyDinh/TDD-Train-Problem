@@ -14,6 +14,8 @@ namespace TrainInformation
 
                 //todo: try catch
                 var routes = GetTrainRouteInfoFromFile(fileName);
+                var railroadSystem = new RailroadSystem();
+                railroadSystem.BuildRoutesGraphWith(routes);
             }
         }
 

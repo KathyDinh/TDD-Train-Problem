@@ -10,9 +10,14 @@ namespace TrainInformation
         {
             adjacencyList = new AdjacencyList();
         }
-        public List<char> GetNeighborsOf(char vertex)
+        public List<char> GetNeighborsOf(char town)
         {
-            return adjacencyList.GetNeighborsOf(vertex);
+            return adjacencyList.GetNeighborsOf(town);
+        }
+
+        public void AddOneWayRoute(char startTown, char endTown, int distance)
+        {
+            adjacencyList.AddDirectedEdge(startTown, endTown, distance);
         }
     }
 }
