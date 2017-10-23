@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TrainInformation
 {
@@ -40,7 +43,7 @@ namespace TrainInformation
             return true;
         }
 
-        private static string[] GetTrainRouteInfoFromFile(string fileName)
+        public static string[] GetTrainRouteInfoFromFile(string fileName)
         {
             string[] routes = null;
 
@@ -51,7 +54,7 @@ namespace TrainInformation
                 var routeInfoLine = streamReader.ReadLine();
                 if (routeInfoLine != null)
                 {
-                    routes = routeInfoLine.Split(new[] {",", " "}, StringSplitOptions.RemoveEmptyEntries);
+                    routes = routeInfoLine.Split(new[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
                 }
             }
 
