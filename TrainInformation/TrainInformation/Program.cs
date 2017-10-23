@@ -12,6 +12,7 @@ namespace TrainInformation
             {
                 if (!TryGetFileName(out var fileName)) return;
 
+                //todo: try catch
                 var routes = GetTrainRouteInfoFromFile(fileName);
             }
         }
