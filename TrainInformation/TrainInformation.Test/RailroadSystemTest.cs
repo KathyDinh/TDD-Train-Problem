@@ -16,8 +16,9 @@ namespace TrainInformation.Test
             var routeInfo = new string[0];
             var target = new RailroadSystem();
 
-            var actual = target.BuildRoutesGraph(routeInfo);
-            
+            target.BuildRoutesGraphWith(routeInfo);
+            var actual = target.RoutesGraph;
+
             Assert.That(actual, Is.InstanceOf<Graph>());
         }
 
@@ -30,7 +31,7 @@ namespace TrainInformation.Test
             };
           
             var target = new RailroadSystem();
-            target.BuildRoutesGraph(routeInfo);
+            target.BuildRoutesGraphWith(routeInfo);
             var actual = target.RoutesGraph;
 
             Assert.That(actual.GetNeighborsOf('A'), Is.EquivalentTo(new [] { 'B', 'D', 'E'}));

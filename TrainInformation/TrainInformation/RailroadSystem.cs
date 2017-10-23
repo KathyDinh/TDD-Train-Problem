@@ -27,7 +27,7 @@ namespace TrainInformation
             return _routesGraph;
         }
 
-        public void BuildRoutesGraph(string[] routesInfo)
+        public void BuildRoutesGraphWith(string[] routesInfo)
         {
             RoutesGraph = new Graph();
             foreach (var route in routesInfo)
