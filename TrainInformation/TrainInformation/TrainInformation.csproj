@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{385773B2-E557-4D1C-A58D-4511E01C34B4}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>TrainInformation1</RootNamespace>
-    <AssemblyName>TrainInformation1</AssemblyName>
+    <RootNamespace>TrainInformation</RootNamespace>
+    <AssemblyName>TrainInformation</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,8 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Graph.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RailroadSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

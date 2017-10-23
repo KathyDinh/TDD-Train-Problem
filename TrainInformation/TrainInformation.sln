@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainInformation.Test", "TrainInformation.Test\TrainInformation.Test.csproj", "{D2893234-9C36-45E3-9EAE-DB3F878BDCB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainInformation", "TrainInformation1\TrainInformation.csproj", "{385773B2-E557-4D1C-A58D-4511E01C34B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainInformation", "TrainInformation\TrainInformation.csproj", "{385773B2-E557-4D1C-A58D-4511E01C34B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
