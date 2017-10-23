@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace TrainInformation
@@ -9,6 +10,7 @@ namespace TrainInformation
         private static readonly int START_TOWN_GROUP_INDEX = 1;
         private static readonly int END_TOWN_GROUP_INDEX = 2;
         private static readonly int DISTANCE_GROUP_INDEX = 3;
+        private static readonly int MAX_NUMBER_OF_TOWNS = 5; //Town names are alphabet between A-E
         private static readonly Regex ROUTE_INFO_REG_EX = new Regex(ROUTE_INFO_PATTERN);
 
         private Graph _routesGraph;
@@ -29,7 +31,7 @@ namespace TrainInformation
 
         public void BuildRoutesGraphWith(string[] routesInfo)
         {
-            RoutesGraph = new Graph();
+            RoutesGraph = new Graph(MAX_NUMBER_OF_TOWNS);
             foreach (var route in routesInfo)
             {
                 var match = ROUTE_INFO_REG_EX.Match(route.ToUpper());
@@ -50,6 +52,15 @@ namespace TrainInformation
                 totalDistance += RoutesGraph.GetDistanceOf(stops[i], stops[i + 1]);
             }
             return totalDistance;
+        }
+
+        public int GetDistanceOfShortestRoute(char startTown, char endTown)
+        {
+            if (startTown == endTown)
+            {
+                return RoutesGraph.GetDistanceOfShortestLoop(startTown);
+            }
+            return RoutesGraph.GetDistanceOfShortestRoute(startTown, endTown);
         }
     }
 }

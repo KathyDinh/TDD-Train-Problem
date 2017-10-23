@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TrainInformation
 {
     internal class AdjacencyList
     {
-        private static readonly int MAX_NUMBER_OF_VERTICES = 5; //Town names are alphabet between A-E
+        private readonly int MAX_NUMBER_OF_VERTICES;
         private Dictionary<char, List<DirectedEdge>> adjacencyList;
 
-        public AdjacencyList()
+        public AdjacencyList() : this(0) { }
+        public AdjacencyList(int maxNumberOfVertices)
         {
+            MAX_NUMBER_OF_VERTICES = maxNumberOfVertices;
             adjacencyList = new Dictionary<char, List<DirectedEdge>>(MAX_NUMBER_OF_VERTICES);
         }
 
@@ -69,6 +72,14 @@ namespace TrainInformation
             }
 
             return -1;
+        }
+
+        public IEnumerable<char> GetAllVertices()
+        {
+            foreach (var key in adjacencyList.Keys)
+            {
+                yield return key;
+            }
         }
     }
 }

@@ -87,5 +87,47 @@ namespace TrainInformation.Test
             Assert.That(exception.exceptionType, Is.EqualTo(RailRoadSystemExceptionType.NoRouteExists));
             Assert.That(exception.Message, Is.EqualTo("NO SUCH ROUTE"));
         }
+
+        //Q8
+        [Test]
+        public void GetDistanceOfShortestRoute_IfStartTownAndEndTownAreDifferentShouldReturnCorrectValue()
+        {
+            var routeInfo = new[]
+            {
+                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
+            };
+
+            var target = new RailroadSystem();
+            target.BuildRoutesGraphWith(routeInfo);
+
+            var startTown = 'A';
+            var endTown = 'C';
+            var expected = 9;
+
+            var actual = target.GetDistanceOfShortestRoute(startTown, endTown);
+
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        //Q9
+        [Test]
+        public void GetDistanceOfShortestRoute_IfStartTownAndEndTownAreSameShouldReturnCorrectValue()
+        {
+            var routeInfo = new[]
+            {
+                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
+            };
+
+            var target = new RailroadSystem();
+            target.BuildRoutesGraphWith(routeInfo);
+
+            var startTown = 'B';
+            var endTown = 'B';
+            var expected = 9;
+
+            var actual = target.GetDistanceOfShortestRoute(startTown, endTown);
+
+            Assert.That(actual, Is.EqualTo(expected));
+        }
     }
 }
