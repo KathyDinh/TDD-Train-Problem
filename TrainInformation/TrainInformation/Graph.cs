@@ -7,6 +7,7 @@ namespace TrainInformation
 {
     internal class Graph
     {
+        private static readonly int INFINITY = 100000;
         private readonly int MAX_NUMBER_OF_TOWNS;
         private readonly AdjacencyList adjacencyList;
 
@@ -46,18 +47,14 @@ namespace TrainInformation
 
         public int GetDistanceOfShortestRoute(char startTown, char endTown)
         {
-            var allTowns = GetAllTowns().ToList();
-            if (!allTowns.Contains(startTown) || !allTowns.Contains(endTown))
-            {
-                throw new RailRoadSystemException(RailRoadSystemExceptionType.NoRouteExists, "NO SUCH ROUTE");
-            }
+            var allTowns = GetAllTowns();
+            CheckIfTownsAreValid(startTown, endTown, allTowns);
 
             var route_distance = new Dictionary<char, int>(MAX_NUMBER_OF_TOWNS);
             var previous = new Dictionary<char, char>(MAX_NUMBER_OF_TOWNS);
             var remainingTowns = new List<char>(MAX_NUMBER_OF_TOWNS);
             var unknownTown = '-';
 
-            var infinity = 100000;
             foreach (var town in allTowns)
             {
                 previous.Add(town, unknownTown);
@@ -68,7 +65,7 @@ namespace TrainInformation
                     continue;
                 }   
                 remainingTowns.Add(town);
-                route_distance.Add(town, infinity);
+                route_distance.Add(town, INFINITY);
             }
 
             while (remainingTowns.Count != 0)
@@ -101,18 +98,28 @@ namespace TrainInformation
 
             }
 
-            if (route_distance[endTown] == infinity)
+            var distanceOfShortestRoute = route_distance[endTown];
+            CheckIfDistanceValueIsValid(distanceOfShortestRoute);
+            return distanceOfShortestRoute;
+        }
+
+        private static void CheckIfTownsAreValid(char startTown, char endTown, List<char> allTowns)
+        {
+            if (!allTowns.Contains(startTown) || !allTowns.Contains(endTown))
             {
                 throw new RailRoadSystemException(RailRoadSystemExceptionType.NoRouteExists, "NO SUCH ROUTE");
             }
-            return route_distance[endTown];
         }
 
-        public List<char> GetAllTowns()
+        private static void CheckIfDistanceValueIsValid(int distance)
         {
-            return adjacencyList.GetAllVertices();
+            if (distance == INFINITY)
+            {
+                throw new RailRoadSystemException(RailRoadSystemExceptionType.NoRouteExists, "NO SUCH ROUTE");
+            }
         }
 
+      
         public int GetDistanceOfShortestLoop(char startTown)
         {
             var allTowns = GetAllTowns();
@@ -185,7 +192,10 @@ namespace TrainInformation
             }
             return route_distance[endTown];
         }
-
+        public List<char> GetAllTowns()
+        {
+            return adjacencyList.GetAllVertices();
+        }
         public int GetNumberOfTripsWithMaxStops(char startTown, char endTown, int maxStops)
         {
             var queue = new Queue<char>();

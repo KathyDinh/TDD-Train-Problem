@@ -55,6 +55,7 @@ namespace TrainInformation
         {
             const string EXIT_CMD = "exit";
             const string SAMPLE_DATA_FILE_NAME = "sample_route_data.txt";
+
             Console.WriteLine(
                 $"Please enter absolute path of the text file to continue or {EXIT_CMD} to close the application:");
             userInput = Console.ReadLine();
