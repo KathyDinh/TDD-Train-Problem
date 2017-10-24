@@ -15,7 +15,7 @@ namespace TrainInformation
 
         public int GetHashCode(char obj)
         {
-            return obj.GetHashCode();
+            return char.ToUpperInvariant(obj).GetHashCode();
         }
     }
 }

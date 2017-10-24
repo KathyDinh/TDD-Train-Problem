@@ -8,13 +8,16 @@ namespace TrainInformation
     {
         private readonly int MAX_NUMBER_OF_VERTICES;
         private Dictionary<char, List<DirectedEdge>> edgesByStartVertex;
+        private IEqualityComparer<char> charEqualityComparer;
+
 
         public AdjacencyList() : this(0) { }
         public AdjacencyList(int maxNumberOfVertices)
         {
             MAX_NUMBER_OF_VERTICES = maxNumberOfVertices;
+            charEqualityComparer = new CaseInsensitiveCharEqualityComparer(); //AdjacencyList is case-insensitive
             edgesByStartVertex = new Dictionary<char, List<DirectedEdge>>(MAX_NUMBER_OF_VERTICES
-                , new CaseInsensitiveCharEqualityComparer());//Dictionary is case-insensitive
+                , charEqualityComparer);
         }
 
         public List<char> GetNeighborsOf(char vertex)
@@ -44,10 +47,12 @@ namespace TrainInformation
             if (!edgesByStartVertex.TryGetValue(edge.StartVertex, out edgesFromStartVertex))
             {
                 edgesFromStartVertex = new List<DirectedEdge>(MAX_NUMBER_OF_VERTICES);
-                edgesByStartVertex.Add(edge.StartVertex, edgesFromStartVertex);
+                edgesByStartVertex.Add(capitalize(edge.StartVertex), edgesFromStartVertex);
             }
 
-            edgesFromStartVertex.Add(edge);
+            //Store vertices in uppercase
+            edgesFromStartVertex.Add(new DirectedEdge(capitalize(edge.StartVertex), capitalize(edge.EndVertex),
+                edge.Weight));
         }
 
 
@@ -66,7 +71,7 @@ namespace TrainInformation
             var edgesFromStartVertex = GetEdgesFrom(startVertex);
             foreach (var edge in edgesFromStartVertex)
             {
-                if (edge.EndVertex == endVertex)
+                if (charEqualityComparer.Equals(edge.EndVertex, endVertex))
                 {
                     return edge.Weight;
                 }
@@ -78,6 +83,11 @@ namespace TrainInformation
         public List<char> GetAllVertices()
         {
             return edgesByStartVertex.Keys.ToList();
+        }
+
+        private char capitalize(char aChar)
+        {
+            return char.ToUpperInvariant(aChar);
         }
     }
 }
