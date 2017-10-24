@@ -65,10 +65,6 @@ namespace TrainInformation
         {
             try
             {
-                if (startTown == endTown)
-                {
-                    return RoutesGraph.GetDistanceOfShortestLoop(startTown);
-                }
                 return RoutesGraph.GetDistanceOfShortestRoute(startTown, endTown);
             }
             catch (Exception ex)

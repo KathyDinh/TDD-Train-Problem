@@ -8,6 +8,7 @@ namespace TrainInformation
     internal class Graph
     {
         private static readonly int INFINITY = 100000;
+        private static readonly char DUMMY_TOWN_NAME = '1';
         private readonly int MAX_NUMBER_OF_TOWNS;
         private readonly AdjacencyList adjacencyList;
 
@@ -50,10 +51,18 @@ namespace TrainInformation
             var allTowns = GetAllTowns();
             CheckIfTownsAreValid(startTown, endTown, allTowns);
 
+            var routeIsALoop = startTown == endTown;
+            
             var route_distance = new Dictionary<char, int>(MAX_NUMBER_OF_TOWNS);
             var previous = new Dictionary<char, char>(MAX_NUMBER_OF_TOWNS);
             var remainingPaths = new MinPriorityQueue<PathFromSource>(MAX_NUMBER_OF_TOWNS);
             var unknownTown = '-';
+
+            if (routeIsALoop)
+            {
+                endTown = DUMMY_TOWN_NAME;
+                allTowns.Add(endTown);
+            }
 
             foreach (var town in allTowns)
             {
@@ -71,7 +80,8 @@ namespace TrainInformation
             {
                 var currentPath = remainingPaths.Dequeue();
                 var currentTown = currentPath.Stop;
-                if (currentPath.Distance > route_distance[currentTown])
+                if (currentPath.Distance > route_distance[currentTown] 
+                    || (routeIsALoop && currentTown == endTown))
                 {
                     continue;
                 }
@@ -79,13 +89,19 @@ namespace TrainInformation
                 var neighbors = GetNeighborsOf(currentTown);
                 foreach (var neighbor in neighbors)
                 {
-                    var currentDistance = GetDistanceOf(currentTown, neighbor);
+                    var currentNeighbor = neighbor;
+                    var currentDistance = GetDistanceOf(currentTown, currentNeighbor);
 
-                    if (route_distance[currentTown] + currentDistance >= route_distance[neighbor]) continue;
+                    if (routeIsALoop && currentNeighbor == startTown)
+                    {
+                        currentNeighbor = endTown;
+                    }
 
-                    route_distance[neighbor] = route_distance[currentTown] + currentDistance;
-                    previous[neighbor] = currentTown;
-                    remainingPaths.Enqueue(new PathFromSource(neighbor, route_distance[neighbor]));
+                    if (route_distance[currentTown] + currentDistance >= route_distance[currentNeighbor]) continue;
+
+                    route_distance[currentNeighbor] = route_distance[currentTown] + currentDistance;
+                    previous[currentNeighbor] = currentTown;
+                    remainingPaths.Enqueue(new PathFromSource(currentNeighbor, route_distance[currentNeighbor]));
                 }
 
             }
@@ -110,80 +126,7 @@ namespace TrainInformation
                 throw new RailRoadSystemException(RailRoadSystemExceptionType.NoRouteExists, "NO SUCH ROUTE");
             }
         }
-
       
-        public int GetDistanceOfShortestLoop(char startTown)
-        {
-            var allTowns = GetAllTowns();
-            if (!allTowns.Contains(startTown))
-            {
-                throw new RailRoadSystemException(RailRoadSystemExceptionType.NoRouteExists, "NO SUCH ROUTE");
-            }
-
-            var endTown = '1';
-            var route_distance = new Dictionary<char, int>(MAX_NUMBER_OF_TOWNS);
-            var previous = new Dictionary<char, char>(MAX_NUMBER_OF_TOWNS);
-            var remainingTowns = new List<char>(MAX_NUMBER_OF_TOWNS);
-            var unknownTown = '-';
-            var infinity = 100000;
-
-
-            allTowns.Add(endTown);
-            foreach (var town in allTowns)
-            {
-                previous.Add(town, unknownTown);
-                if (town == startTown)
-                {
-                    remainingTowns.Insert(0, town);
-                    route_distance.Add(town, 0);
-                    continue;
-                }
-                remainingTowns.Add(town);
-                route_distance.Add(town, infinity);
-            }
-
-            while (remainingTowns.Count != 0)
-            {
-                var currentTown = remainingTowns[0];
-                remainingTowns.RemoveAt(0);
-
-                if (currentTown == endTown)
-                {
-                    continue;
-                }
-
-                var neighbors = GetNeighborsOf(currentTown);
-                foreach (var neighbor in neighbors)
-                {
-                    var currentDistance = GetDistanceOf(currentTown, neighbor);
-                    var currentNeighbor = neighbor == startTown? endTown: neighbor;
-                    
-                    if (route_distance[currentTown] + currentDistance <
-                        route_distance[currentNeighbor])
-                    {
-                        route_distance[currentNeighbor] = route_distance[currentTown] + currentDistance;
-                        previous[currentNeighbor] = currentTown;
-
-                        remainingTowns.Remove(currentNeighbor);
-                        for (var i = 0; i < remainingTowns.Count; i++)
-                        {
-                            if (route_distance[currentNeighbor] < remainingTowns[i])
-                            {
-                                remainingTowns.Insert(i, currentNeighbor);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-            }
-
-            if (route_distance[endTown] == infinity)
-            {
-                throw new RailRoadSystemException(RailRoadSystemExceptionType.NoRouteExists, "NO SUCH ROUTE");
-            }
-            return route_distance[endTown];
-        }
         public List<char> GetAllTowns()
         {
             return adjacencyList.GetAllVertices();
