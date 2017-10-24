@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TrainInformation.Data_Structures;
 using TrainInformation.Exceptions;
 
@@ -79,7 +80,7 @@ namespace TrainInformation.Logic
             {
                 var currentPath = remainingPaths.Dequeue();
                 var currentTown = currentPath.Stop;
-                if (currentPath.Distance > route_distance[currentTown] 
+                if (currentPath.Length > route_distance[currentTown] 
                     || (routeIsALoop && currentTown == endTown))
                 {
                     continue;
@@ -132,95 +133,60 @@ namespace TrainInformation.Logic
         }
         public int GetNumberOfTripsWithMaxStops(char startTown, char endTown, int maxStops)
         {
-            var stopCountFromSource = new Queue<PathFromSource>();
-            var tripCount = 0;
-            
-            stopCountFromSource.Enqueue(new PathFromSource(startTown, 0));
-
-            while (stopCountFromSource.Count != 0)
-            {
-                var currentPath = stopCountFromSource.Dequeue();
-                var currentTown = currentPath.Stop;
-                var currentStopCount = currentPath.Distance;
-
-                if (currentTown == endTown && currentStopCount > 0)
-                {
-                    tripCount++;
-                }
-
-                if (currentStopCount == maxStops)
-                {
-                    continue;
-                }
-
-                foreach (var neighbor in GetNeighborsOf(currentTown))
-                {
-                    var addedStopCount = 1;
-                    stopCountFromSource.Enqueue(new PathFromSource(neighbor, currentStopCount + addedStopCount));
-                }
-            }
-            return tripCount;
+            return CountPathsWith(startTown
+                , endTown
+                , (currentPathLength) => (currentPathLength > 0 && currentPathLength <= maxStops)
+                , (currentPathLength) => (currentPathLength == maxStops)
+                , (currentStop, neighbor) => 1);
         }
 
         public int GetNumberOfTripsWithExactStops(char startTown, char endTown, int exactStops)
         {
-            var stopCountFromSource = new Queue<PathFromSource>();
-            var tripCount = 0;
-
-            stopCountFromSource.Enqueue(new PathFromSource(startTown, 0));
-
-            while (stopCountFromSource.Count != 0)
-            {
-                var currentPath = stopCountFromSource.Dequeue();
-                var currentTown = currentPath.Stop;
-                var currentStopCount = currentPath.Distance;
-
-                if (currentTown == endTown && currentStopCount == exactStops)
-                {
-                    tripCount++;
-                }
-
-                if (currentStopCount == exactStops)
-                {
-                    continue;
-                }
-
-                foreach (var neighbor in GetNeighborsOf(currentTown))
-                {
-                    var addedStopCount = 1;
-                    stopCountFromSource.Enqueue(new PathFromSource(neighbor, currentStopCount + addedStopCount));
-                }
-            }
-            return tripCount;
+            return CountPathsWith(startTown
+                , endTown
+                , (currentPathLength) => (currentPathLength == exactStops)
+                , (currentPathLength) => (currentPathLength == exactStops)
+                , (currentStop, neighbor) => 1);
         }
 
         public int GetNumberOfTripsWithMaxDistance(char startTown, char endTown, int maxDistance)
         {
-            var pathFromSource = new Queue<PathFromSource>();
+            return CountPathsWith(startTown
+                , endTown
+                , (currentPathLength) => (currentPathLength > 0 && currentPathLength < maxDistance)
+                , (currentPathLength) => (currentPathLength >= maxDistance)
+                , GetDistanceOf);
+        }
+
+        private int CountPathsWith(char source, char destination, Predicate<int> pathLengthConditionIsMet, Predicate<int> stopSearchConditionIsMet, Func<char, char, int> getPathLength)
+        {
+            var pathsFromSource = new Queue<PathFromSource>();
             var tripCount = 0;
 
-            pathFromSource.Enqueue(new PathFromSource(startTown, 0));
+            pathsFromSource.Enqueue(new PathFromSource(source, 0));
 
-            while (pathFromSource.Count != 0)
+            while (pathsFromSource.Count != 0)
             {
-                var currentPath = pathFromSource.Dequeue();
-                var currentTown = currentPath.Stop;
-                var currentDistance = currentPath.Distance;
+                var currentPath = pathsFromSource.Dequeue();
+                var currentStop = currentPath.Stop;
+                var currentLength = currentPath.Length;
 
-                if (currentTown == endTown && currentDistance > 0 && currentDistance < maxDistance)
+                if (currentStop == destination && pathLengthConditionIsMet(currentLength))
                 {
                     tripCount++;
                 }
 
-                if (currentDistance >= maxDistance)
+                if (stopSearchConditionIsMet(currentLength))
                 {
                     continue;
                 }
 
-                foreach (var neighbor in GetNeighborsOf(currentTown))
+
+                var neighbors = GetNeighborsOf(currentStop);
+                foreach (var neighbor in neighbors)
                 {
-                    var newDistance = GetDistanceOf(currentTown, neighbor);
-                    pathFromSource.Enqueue(new PathFromSource(neighbor, currentDistance + newDistance));
+                    var additionalLength = getPathLength(currentStop, neighbor);
+                    pathsFromSource.Enqueue(new PathFromSource(neighbor, currentLength + additionalLength));
                 }
             }
             return tripCount;
