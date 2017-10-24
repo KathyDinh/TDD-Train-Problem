@@ -50,7 +50,7 @@ namespace TrainInformation
                 edgesByStartVertex.Add(capitalize(edge.StartVertex), edgesFromStartVertex);
             }
 
-            //Store vertices in uppercase
+            //AdjacencyList stores vertices in uppercase
             edgesFromStartVertex.Add(new DirectedEdge(capitalize(edge.StartVertex), capitalize(edge.EndVertex),
                 edge.Weight));
         }
