@@ -12,6 +12,7 @@ namespace TrainInformation.Logic
         private readonly int MAX_NUMBER_OF_NODES;
         private readonly AdjacencyList _adjacencyList;
 
+        public Graph() : this(24){}
         public Graph(int maxNumberOfNodes)
         {
             MAX_NUMBER_OF_NODES = maxNumberOfNodes;
@@ -48,9 +49,9 @@ namespace TrainInformation.Logic
 
         public int GetLengthOfShortestPath(char source, char destination)
         {
-            var allNodes = GetAllNodes();
-            CheckIfNodesAreValid(source, destination, allNodes);
+            CheckIfPathCanExist(source, destination);
 
+            var allNodes = GetAllNodes();
             var pathIsALoop = source == destination;
             
             var minPathLengthFromSource = new Dictionary<char, int>(MAX_NUMBER_OF_NODES);
@@ -111,26 +112,6 @@ namespace TrainInformation.Logic
             return lengthOfShortestPath;
         }
 
-        private static void CheckIfNodesAreValid(char startTown, char endTown, List<char> allTowns)
-        {
-            if (!allTowns.Contains(startTown) || !allTowns.Contains(endTown))
-            {
-                throw new GraphException(GraphExceptionType.NoRouteExists, "NO SUCH ROUTE");
-            }
-        }
-
-        private static void CheckIfPathLengthIsValid(int pathLength)
-        {
-            if (pathLength == INFINITY)
-            {
-                throw new GraphException(GraphExceptionType.NoRouteExists, "NO SUCH ROUTE");
-            }
-        }
-      
-        public List<char> GetAllNodes()
-        {
-            return _adjacencyList.GetAllVertices();
-        }
         public int GetNumberOfPathsWithMaxStops(char source, char destination, int limit)
         {
             return CountPathsWith(source
@@ -160,6 +141,8 @@ namespace TrainInformation.Logic
 
         private int CountPathsWith(char source, char destination, Predicate<int> pathLengthConditionIsMet, Predicate<int> stopSearchConditionIsMet, Func<char, char, int> getPathLength)
         {
+            CheckIfPathCanExist(source, destination);
+
             var pathsFromSource = new Queue<PathFromSource>();
             var pathCount = 0;
 
@@ -189,6 +172,28 @@ namespace TrainInformation.Logic
                 }
             }
             return pathCount;
+        }
+
+        private void CheckIfPathCanExist(char source, char destination)
+        {
+            var allNodes = GetAllNodes();
+            if (!allNodes.Contains(source) || !allNodes.Contains(destination))
+            {
+                throw new GraphException(GraphExceptionType.NoRouteExists, "NO SUCH ROUTE");
+            }
+        }
+
+        private void CheckIfPathLengthIsValid(int pathLength)
+        {
+            if (pathLength == INFINITY)
+            {
+                throw new GraphException(GraphExceptionType.NoRouteExists, "NO SUCH ROUTE");
+            }
+        }
+
+        public List<char> GetAllNodes()
+        {
+            return _adjacencyList.GetAllVertices();
         }
     }
 }
