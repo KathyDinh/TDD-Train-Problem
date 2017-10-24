@@ -133,20 +133,16 @@ namespace TrainInformation
         }
         public int GetNumberOfTripsWithMaxStops(char startTown, char endTown, int maxStops)
         {
-            var queue = new Queue<char>();
-            var stopCount = new List<KeyValuePair<char, int>>();
+            var stopCountFromSource = new Queue<PathFromSource>();
             var tripCount = 0;
             
-            queue.Enqueue(startTown);
-            stopCount.Add(new KeyValuePair<char, int>(startTown, 0));
+            stopCountFromSource.Enqueue(new PathFromSource(startTown, 0));
 
-            while (queue.Count != 0)
+            while (stopCountFromSource.Count != 0)
             {
-                var currentTown = queue.Dequeue();
-
-                var currentStopCountPair = stopCount.Find((pair) => pair.Key == currentTown);
-                stopCount.Remove(currentStopCountPair);
-                var currentStopCount = currentStopCountPair.Value;
+                var currentPath = stopCountFromSource.Dequeue();
+                var currentTown = currentPath.Stop;
+                var currentStopCount = currentPath.Distance;
 
                 if (currentTown == endTown && currentStopCount > 0)
                 {
@@ -160,8 +156,7 @@ namespace TrainInformation
 
                 foreach (var neighbor in GetNeighborsOf(currentTown))
                 {
-                    queue.Enqueue(neighbor);
-                    stopCount.Add(new KeyValuePair<char, int>(neighbor, currentStopCount + 1));
+                    stopCountFromSource.Enqueue(new PathFromSource(neighbor, currentStopCount + 1));
                 }
             }
             return tripCount;
@@ -237,6 +232,16 @@ namespace TrainInformation
                 }
             }
             return tripCount;
+        }
+    }
+
+    internal class StopCountFromSource : IComparable<StopCountFromSource>
+    {
+        public char Stop { get; set; }
+        public int StopCount { get; set; }
+        public int CompareTo(StopCountFromSource other)
+        {
+            return StopCount - other.StopCount;
         }
     }
 

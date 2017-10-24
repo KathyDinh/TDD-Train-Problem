@@ -27,7 +27,10 @@ namespace TrainInformation
             {
                 if (item.CompareTo(backingStore[i]) >= -1) continue;
                 backingStore.Insert(i, item);
+                return;
             }
+
+            backingStore.Add(item);
         }
 
         public T Dequeue()
