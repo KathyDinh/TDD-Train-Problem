@@ -77,22 +77,19 @@ namespace TrainInformation
             return true;
         }
 
-        public static string[] GetTrainRouteInfoFromFile(string fileName)
+        public static string GetTrainRouteInfoFromFile(string fileName)
         {
             string[] routes = null;
 
             var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            
             using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
             {
                 //assume that the route info is in first line and routes are separated by comma and space
-                var routeInfoLine = streamReader.ReadLine();
-                if (routeInfoLine != null)
-                {
-                    routes = routeInfoLine.Split(new[] { ",", " " }, StringSplitOptions.RemoveEmptyEntries);
-                }
+                var routeInfoLine = streamReader.ReadToEnd();
+                return routeInfoLine;
             }
 
-            return routes;
         }
     }
 }

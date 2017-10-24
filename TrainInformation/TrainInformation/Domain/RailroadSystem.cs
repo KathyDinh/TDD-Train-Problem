@@ -11,7 +11,7 @@ namespace TrainInformation.Domain
         private static readonly int END_TOWN_GROUP_INDEX = 2;
         private static readonly int DISTANCE_GROUP_INDEX = 3;
         private static readonly int MAX_NUMBER_OF_TOWNS = 5; //Town names are alphabet between A-E
-        private static readonly Regex ROUTE_INFO_REG_EX = new Regex(ROUTE_INFO_PATTERN);
+        private static readonly Regex ROUTE_INFO_REG_EX = new Regex(ROUTE_INFO_PATTERN, RegexOptions.IgnoreCase);
 
         private Graph _routesGraph;
         public Graph RoutesGraph
@@ -25,14 +25,13 @@ namespace TrainInformation.Domain
             return _routesGraph;
         }
 
-        public void BuildRoutesGraphWith(string[] routesInfo)
+        public void BuildRoutesGraphWith(string routesInfo)
         {
             RoutesGraph = new Graph(MAX_NUMBER_OF_TOWNS);
-            foreach (var route in routesInfo)
-            {
-                var match = ROUTE_INFO_REG_EX.Match(route.ToUpper());
 
-                if (!match.Success) continue;
+            var matches = ROUTE_INFO_REG_EX.Matches(routesInfo);
+            foreach (Match match in matches)
+            {
                 var startTown = Convert.ToChar(match.Groups[START_TOWN_GROUP_INDEX].Value);
                 var endTown = Convert.ToChar(match.Groups[END_TOWN_GROUP_INDEX].Value);
                 var distance = Convert.ToInt32(match.Groups[DISTANCE_GROUP_INDEX].Value);

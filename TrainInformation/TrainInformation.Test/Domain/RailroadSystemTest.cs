@@ -10,7 +10,7 @@ namespace TrainInformation.Test.Domain
         [Test]
         public void BuildRouteGraph_ShouldBuildAGraph()
         {
-            var routeInfo = new string[0];
+            var routeInfo = string.Empty;
             var target = new RailroadSystem();
 
             target.BuildRoutesGraphWith(routeInfo);
@@ -22,10 +22,7 @@ namespace TrainInformation.Test.Domain
         [Test]
         public void BuildRouteGraph_ShouldBuildCorrectGraph()
         {
-            var routeInfo = new[]
-            {
-                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
-            };
+            var routeInfo = "AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7";
           
             var target = new RailroadSystem();
             target.BuildRoutesGraphWith(routeInfo);
@@ -38,10 +35,7 @@ namespace TrainInformation.Test.Domain
         [Test]
         public void GetDistanceOfRoute_ShouldReturnCorrectValue()
         {
-            var routeInfo = new[]
-            {
-                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
-            };
+            var routeInfo = "AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7";
 
             var target = new RailroadSystem();
             target.BuildRoutesGraphWith(routeInfo);
@@ -70,10 +64,7 @@ namespace TrainInformation.Test.Domain
         [Test]
         public void GetDistanceOfRoute_ShouldReturnMessageIfNoRouteExists()
         {
-            var routeInfo = new[]
-            {
-                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
-            };
+            var routeInfo = "AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7";
 
             var target = new RailroadSystem();
             target.BuildRoutesGraphWith(routeInfo);
@@ -88,10 +79,7 @@ namespace TrainInformation.Test.Domain
         [Test]
         public void GetNumberOfTripsWithMaxStops_ShouldReturCorrectValue()
         {
-            var routeInfo = new[]
-            {
-                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
-            };
+            var routeInfo = "AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7";
 
             var target = new RailroadSystem();
             target.BuildRoutesGraphWith(routeInfo);
@@ -109,10 +97,7 @@ namespace TrainInformation.Test.Domain
         [Test]
         public void GetNumberOfTripsWithExactStops_ShouldReturCorrectValue()
         {
-            var routeInfo = new[]
-            {
-                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
-            };
+            var routeInfo = "AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7";
 
             var target = new RailroadSystem();
             target.BuildRoutesGraphWith(routeInfo);
@@ -130,10 +115,7 @@ namespace TrainInformation.Test.Domain
         [Test]
         public void GetDistanceOfShortestRoute_IfStartTownAndEndTownAreDifferentShouldReturnCorrectValue()
         {
-            var routeInfo = new[]
-            {
-                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
-            };
+            var routeInfo = "AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7";
 
             var target = new RailroadSystem();
             target.BuildRoutesGraphWith(routeInfo);
@@ -151,10 +133,7 @@ namespace TrainInformation.Test.Domain
         [Test]
         public void GetDistanceOfShortestRoute_IfStartTownAndEndTownAreSameShouldReturnCorrectValue()
         {
-            var routeInfo = new[]
-            {
-                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
-            };
+            var routeInfo = "AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7";
 
             var target = new RailroadSystem();
             target.BuildRoutesGraphWith(routeInfo);
@@ -172,10 +151,7 @@ namespace TrainInformation.Test.Domain
         [Test]
         public void GetNumberOfTripsWithMaxDistance_ShouldReturnCorrectValue()
         {
-            var routeInfo = new[]
-            {
-                "AB5", "BC4", "CD8", "DC8", "DE6", "AD5", "CE2", "EB3", "AE7"
-            };
+            var routeInfo = "AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7";
 
             var target = new RailroadSystem();
             target.BuildRoutesGraphWith(routeInfo);
