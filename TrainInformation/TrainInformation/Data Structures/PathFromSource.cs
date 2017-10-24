@@ -14,7 +14,7 @@ namespace TrainInformation.Data_Structures
         public int Length { get; set; }
         public int CompareTo(PathFromSource other)
         {
-            return Stop - other.Stop;
+            return Length - other.Length;
         }
     }
 }
