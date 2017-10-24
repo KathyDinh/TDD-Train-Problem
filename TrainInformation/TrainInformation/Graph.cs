@@ -8,7 +8,7 @@ namespace TrainInformation
     internal class Graph
     {
         private readonly int MAX_NUMBER_OF_TOWNS;
-        private AdjacencyList adjacencyList;
+        private readonly AdjacencyList adjacencyList;
 
         public Graph(int maxNumberOfTowns)
         {
@@ -108,14 +108,14 @@ namespace TrainInformation
             return route_distance[endTown];
         }
 
-        public IEnumerable<char> GetAllTowns()
+        public List<char> GetAllTowns()
         {
             return adjacencyList.GetAllVertices();
         }
 
         public int GetDistanceOfShortestLoop(char startTown)
         {
-            var allTowns = GetAllTowns().ToList();
+            var allTowns = GetAllTowns();
             if (!allTowns.Contains(startTown))
             {
                 throw new RailRoadSystemException(RailRoadSystemExceptionType.NoRouteExists, "NO SUCH ROUTE");

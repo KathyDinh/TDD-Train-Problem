@@ -7,19 +7,20 @@ namespace TrainInformation
     internal class AdjacencyList
     {
         private readonly int MAX_NUMBER_OF_VERTICES;
-        private Dictionary<char, List<DirectedEdge>> adjacencyList;
+        private Dictionary<char, List<DirectedEdge>> edgesByStartVertex;
 
         public AdjacencyList() : this(0) { }
         public AdjacencyList(int maxNumberOfVertices)
         {
             MAX_NUMBER_OF_VERTICES = maxNumberOfVertices;
-            adjacencyList = new Dictionary<char, List<DirectedEdge>>(MAX_NUMBER_OF_VERTICES);
+            edgesByStartVertex = new Dictionary<char, List<DirectedEdge>>(MAX_NUMBER_OF_VERTICES
+                , new CaseInsensitiveCharComparer());//Dictionary is case-insensitive
         }
 
         public List<char> GetNeighborsOf(char vertex)
         {
             List<DirectedEdge> edgesFromVertex;
-            if (!adjacencyList.TryGetValue(vertex, out edgesFromVertex))
+            if (!edgesByStartVertex.TryGetValue(vertex, out edgesFromVertex))
             {
                 return new List<char>();  
             }
@@ -40,10 +41,10 @@ namespace TrainInformation
         public void AddDirectedEdge(DirectedEdge edge)
         {
             List<DirectedEdge> edgesFromStartVertex;
-            if (!adjacencyList.TryGetValue(edge.StartVertex, out edgesFromStartVertex))
+            if (!edgesByStartVertex.TryGetValue(edge.StartVertex, out edgesFromStartVertex))
             {
                 edgesFromStartVertex = new List<DirectedEdge>(MAX_NUMBER_OF_VERTICES);
-                adjacencyList.Add(edge.StartVertex, edgesFromStartVertex);
+                edgesByStartVertex.Add(edge.StartVertex, edgesFromStartVertex);
             }
 
             edgesFromStartVertex.Add(edge);
@@ -53,7 +54,7 @@ namespace TrainInformation
         public List<DirectedEdge> GetEdgesFrom(char startVertex)
         {
             List<DirectedEdge> edgesFromStartVertex;
-            if (!adjacencyList.TryGetValue(startVertex, out edgesFromStartVertex))
+            if (!edgesByStartVertex.TryGetValue(startVertex, out edgesFromStartVertex))
             {
                 return new List<DirectedEdge>();
             }
@@ -74,12 +75,9 @@ namespace TrainInformation
             return -1;
         }
 
-        public IEnumerable<char> GetAllVertices()
+        public List<char> GetAllVertices()
         {
-            foreach (var key in adjacencyList.Keys)
-            {
-                yield return key;
-            }
+            return edgesByStartVertex.Keys.ToList();
         }
     }
 }
