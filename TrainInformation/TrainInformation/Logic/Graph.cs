@@ -149,7 +149,7 @@ namespace TrainInformation.Logic
                 , (currentStop, neighbor) => 1);
         }
 
-        public int GetNumberOfPathsWithMaxDistance(char source, char destination, int limit)
+        public int GetNumberOfPathsWithMaxLength(char source, char destination, int limit)
         {
             return CountPathsWith(source
                 , destination

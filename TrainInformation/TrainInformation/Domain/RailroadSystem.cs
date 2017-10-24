@@ -20,10 +20,6 @@ namespace TrainInformation.Domain
             private set { _routesGraph = value; }
         }
 
-        public RailroadSystem()
-        {
-        }
-
         public Graph GetRoutes()
         {
             return _routesGraph;
@@ -101,7 +97,7 @@ namespace TrainInformation.Domain
         {
             try
             {
-                return RoutesGraph.GetNumberOfPathsWithMaxDistance(startTown, endTown, maxDistance);
+                return RoutesGraph.GetNumberOfPathsWithMaxLength(startTown, endTown, maxDistance);
             }
             catch(Exception ex)
             {
