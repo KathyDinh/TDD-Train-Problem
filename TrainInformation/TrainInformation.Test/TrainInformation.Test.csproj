@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdjacencyListTest.cs" />
+    <Compile Include="CaseInsensitiveCharEqualityComparerTest.cs" />
     <Compile Include="RailroadSystemTest.cs" />
     <Compile Include="ProgramTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

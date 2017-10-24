@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrainInformation
 {
-    internal class CaseInsensitiveCharComparer: IEqualityComparer<char>
+    internal class CaseInsensitiveCharEqualityComparer: IEqualityComparer<char>
     {
         public bool Equals(char x, char y)
         {

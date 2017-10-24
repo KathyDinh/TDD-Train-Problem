@@ -14,7 +14,7 @@ namespace TrainInformation
         {
             MAX_NUMBER_OF_VERTICES = maxNumberOfVertices;
             edgesByStartVertex = new Dictionary<char, List<DirectedEdge>>(MAX_NUMBER_OF_VERTICES
-                , new CaseInsensitiveCharComparer());//Dictionary is case-insensitive
+                , new CaseInsensitiveCharEqualityComparer());//Dictionary is case-insensitive
         }
 
         public List<char> GetNeighborsOf(char vertex)
