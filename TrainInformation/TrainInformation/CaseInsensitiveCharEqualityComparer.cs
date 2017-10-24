@@ -15,6 +15,7 @@ namespace TrainInformation
 
         public int GetHashCode(char obj)
         {
+            //this is to ensure that the dictionary using this comparer will add key correctly
             return char.ToUpperInvariant(obj).GetHashCode();
         }
     }
