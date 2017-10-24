@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data Structures\AdjacencyListTest.cs" />
+    <Compile Include="Data Structures\MinPriorityQueueTest.cs" />
     <Compile Include="Logic\CaseInsensitiveCharEqualityComparerTest.cs" />
     <Compile Include="Domain\RailroadSystemTest.cs" />
     <Compile Include="ProgramTest.cs" />
