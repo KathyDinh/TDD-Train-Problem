@@ -52,48 +52,40 @@ namespace TrainInformation
 
             var route_distance = new Dictionary<char, int>(MAX_NUMBER_OF_TOWNS);
             var previous = new Dictionary<char, char>(MAX_NUMBER_OF_TOWNS);
-            var remainingTowns = new List<char>(MAX_NUMBER_OF_TOWNS);
+            var remainingPaths = new MinPriorityQueue<PathFromSource>(MAX_NUMBER_OF_TOWNS);
             var unknownTown = '-';
 
             foreach (var town in allTowns)
             {
-                previous.Add(town, unknownTown);
+                int initialDistance = INFINITY;
                 if (town == startTown)
                 {
-                    remainingTowns.Insert(0, town);
-                    route_distance.Add(town, 0);
-                    continue;
-                }   
-                remainingTowns.Add(town);
-                route_distance.Add(town, INFINITY);
+                    initialDistance = 0;
+                    remainingPaths.Enqueue(new PathFromSource(town, initialDistance));
+                }
+                route_distance.Add(town, initialDistance);
+                previous.Add(town, unknownTown);
             }
 
-            while (remainingTowns.Count != 0)
+            while (remainingPaths.Count != 0)
             {
-                var currentTown = remainingTowns[0];
-                remainingTowns.RemoveAt(0);
+                var currentPath = remainingPaths.Dequeue();
+                var currentTown = currentPath.Stop;
+                if (currentPath.Distance > route_distance[currentTown])
+                {
+                    continue;
+                }
 
                 var neighbors = GetNeighborsOf(currentTown);
                 foreach (var neighbor in neighbors)
                 {
                     var currentDistance = GetDistanceOf(currentTown, neighbor);
 
-                    if (route_distance[currentTown] + currentDistance <
-                        route_distance[neighbor])
-                    {
-                        route_distance[neighbor] = route_distance[currentTown] + currentDistance;
-                        previous[neighbor] = currentTown;
+                    if (route_distance[currentTown] + currentDistance >= route_distance[neighbor]) continue;
 
-                        remainingTowns.Remove(neighbor);
-                        for(var i = 0; i < remainingTowns.Count; i++) 
-                        {
-                            if (route_distance[neighbor] < remainingTowns[i])
-                            {
-                                remainingTowns.Insert(i, neighbor);
-                                break;
-                            }
-                        }
-                    }
+                    route_distance[neighbor] = route_distance[currentTown] + currentDistance;
+                    previous[neighbor] = currentTown;
+                    remainingPaths.Enqueue(new PathFromSource(neighbor, route_distance[neighbor]));
                 }
 
             }
@@ -302,6 +294,22 @@ namespace TrainInformation
                 }
             }
             return tripCount;
+        }
+    }
+
+    internal class PathFromSource : IComparable<PathFromSource>
+    {
+        public PathFromSource(char stop, int distance)
+        {
+            Stop = stop;
+            Distance = distance;
+        }
+
+        public char Stop { get; set; }
+        public int Distance { get; set; }
+        public int CompareTo(PathFromSource other)
+        {
+            return Stop - other.Stop;
         }
     }
 }
