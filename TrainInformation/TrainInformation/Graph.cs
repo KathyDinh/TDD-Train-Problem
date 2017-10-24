@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
 
@@ -156,7 +155,8 @@ namespace TrainInformation
 
                 foreach (var neighbor in GetNeighborsOf(currentTown))
                 {
-                    stopCountFromSource.Enqueue(new PathFromSource(neighbor, currentStopCount + 1));
+                    var addedStopCount = 1;
+                    stopCountFromSource.Enqueue(new PathFromSource(neighbor, currentStopCount + addedStopCount));
                 }
             }
             return tripCount;
@@ -187,7 +187,8 @@ namespace TrainInformation
 
                 foreach (var neighbor in GetNeighborsOf(currentTown))
                 {
-                    stopCountFromSource.Enqueue(new PathFromSource(neighbor, currentStopCount + 1));
+                    var addedStopCount = 1;
+                    stopCountFromSource.Enqueue(new PathFromSource(neighbor, currentStopCount + addedStopCount));
                 }
             }
             return tripCount;
@@ -195,65 +196,34 @@ namespace TrainInformation
 
         public int GetNumberOfTripsWithMaxDistance(char startTown, char endTown, int maxDistance)
         {
-            var queue = new Queue<char>();
-            var totalDistance = new List<KeyValuePair<char, int>>();
+            var pathFromSource = new Queue<PathFromSource>();
             var tripCount = 0;
 
-            queue.Enqueue(startTown);
-            totalDistance.Add(new KeyValuePair<char, int>(startTown, 0));
+            pathFromSource.Enqueue(new PathFromSource(startTown, 0));
 
-            while (queue.Count != 0)
+            while (pathFromSource.Count != 0)
             {
-                var currentTown = queue.Dequeue();
+                var currentPath = pathFromSource.Dequeue();
+                var currentTown = currentPath.Stop;
+                var currentDistance = currentPath.Distance;
 
-                var currentTotalDistancePair = totalDistance.Find((pair) => pair.Key == currentTown);
-                totalDistance.Remove(currentTotalDistancePair);
-                var currentTotalDistance = currentTotalDistancePair.Value;
-
-                if (currentTown == endTown && currentTotalDistance > 0 && currentTotalDistance < maxDistance)
+                if (currentTown == endTown && currentDistance > 0 && currentDistance < maxDistance)
                 {
                     tripCount++;
                 }
 
-                if (currentTotalDistance >= maxDistance)
+                if (currentDistance >= maxDistance)
                 {
                     continue;
                 }
 
                 foreach (var neighbor in GetNeighborsOf(currentTown))
                 {
-                    var currentDistance = GetDistanceOf(currentTown, neighbor);
-                    queue.Enqueue(neighbor);
-                    totalDistance.Add(new KeyValuePair<char, int>(neighbor, currentTotalDistance + currentDistance));
+                    var newDistance = GetDistanceOf(currentTown, neighbor);
+                    pathFromSource.Enqueue(new PathFromSource(neighbor, currentDistance + newDistance));
                 }
             }
             return tripCount;
-        }
-    }
-
-    internal class StopCountFromSource : IComparable<StopCountFromSource>
-    {
-        public char Stop { get; set; }
-        public int StopCount { get; set; }
-        public int CompareTo(StopCountFromSource other)
-        {
-            return StopCount - other.StopCount;
-        }
-    }
-
-    internal class PathFromSource : IComparable<PathFromSource>
-    {
-        public PathFromSource(char stop, int distance)
-        {
-            Stop = stop;
-            Distance = distance;
-        }
-
-        public char Stop { get; set; }
-        public int Distance { get; set; }
-        public int CompareTo(PathFromSource other)
-        {
-            return Stop - other.Stop;
         }
     }
 }
