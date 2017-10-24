@@ -40,7 +40,7 @@ namespace TrainInformation.Domain
                 var startTown = Convert.ToChar(match.Groups[START_TOWN_GROUP_INDEX].Value);
                 var endTown = Convert.ToChar(match.Groups[END_TOWN_GROUP_INDEX].Value);
                 var distance = Convert.ToInt32(match.Groups[DISTANCE_GROUP_INDEX].Value);
-                RoutesGraph.AddOneWayRoute(startTown, endTown, distance);
+                RoutesGraph.AddOneWayPath(startTown, endTown, distance);
             }
         }
 
@@ -51,7 +51,7 @@ namespace TrainInformation.Domain
                 var totalDistance = 0;
                 for (var i = 0; i < stops.Length - 1; i++)
                 {
-                    totalDistance += RoutesGraph.GetDistanceOf(stops[i], stops[i + 1]);
+                    totalDistance += RoutesGraph.GetLengthOf(stops[i], stops[i + 1]);
                 }
                 return totalDistance;
             }
@@ -65,7 +65,7 @@ namespace TrainInformation.Domain
         {
             try
             {
-                return RoutesGraph.GetDistanceOfShortestRoute(startTown, endTown);
+                return RoutesGraph.GetLengthOfShortestPath(startTown, endTown);
             }
             catch (Exception ex)
             {
@@ -77,7 +77,7 @@ namespace TrainInformation.Domain
         {
             try
             {
-                return RoutesGraph.GetNumberOfTripsWithMaxStops(startTown, endTown, maxStops);
+                return RoutesGraph.GetNumberOfPathsWithMaxStops(startTown, endTown, maxStops);
             }
             catch(Exception ex)
             {
@@ -89,7 +89,7 @@ namespace TrainInformation.Domain
         {
             try
             {
-                return RoutesGraph.GetNumberOfTripsWithExactStops(startTown, endTown, exactStops);
+                return RoutesGraph.GetNumberOfPathsWithExactStops(startTown, endTown, exactStops);
             }
             catch (Exception ex)
             {
@@ -101,7 +101,7 @@ namespace TrainInformation.Domain
         {
             try
             {
-                return RoutesGraph.GetNumberOfTripsWithMaxDistance(startTown, endTown, maxDistance);
+                return RoutesGraph.GetNumberOfPathsWithMaxDistance(startTown, endTown, maxDistance);
             }
             catch(Exception ex)
             {

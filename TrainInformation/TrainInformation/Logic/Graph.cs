@@ -8,160 +8,160 @@ namespace TrainInformation.Logic
     internal class Graph
     {
         private static readonly int INFINITY = 100000;
-        private static readonly char DUMMY_TOWN_NAME = '1';
-        private readonly int MAX_NUMBER_OF_TOWNS;
-        private readonly AdjacencyList adjacencyList;
+        private static readonly char DUMMY_NODE_NAME = '1';
+        private readonly int MAX_NUMBER_OF_NODES;
+        private readonly AdjacencyList _adjacencyList;
 
-        public Graph(int maxNumberOfTowns)
+        public Graph(int maxNumberOfNodes)
         {
-            MAX_NUMBER_OF_TOWNS = maxNumberOfTowns;
-            adjacencyList = new AdjacencyList(MAX_NUMBER_OF_TOWNS);
+            MAX_NUMBER_OF_NODES = maxNumberOfNodes;
+            _adjacencyList = new AdjacencyList(MAX_NUMBER_OF_NODES);
         }
-        public List<char> GetNeighborsOf(char town)
+        public List<char> GetNeighborsOf(char node)
         {
-            var neighbors = adjacencyList.GetNeighborsOf(town);
+            var neighbors = _adjacencyList.GetNeighborsOf(node);
 
             if (neighbors.Count == 0)
             {
-                throw new RailRoadSystemException(RailRoadSystemExceptionType.NoNeightborExists
-                    , $"Town {town} does not have neighbors");
+                throw new GraphException(GraphExceptionType.NoNeightborExists
+                    , $"Node {node} does not have neighbors");
             }
             
-            return adjacencyList.GetNeighborsOf(town);
+            return _adjacencyList.GetNeighborsOf(node);
         }
 
-        public void AddOneWayRoute(char startTown, char endTown, int distance)
+        public void AddOneWayPath(char source, char destination, int length)
         {
-            adjacencyList.AddDirectedEdge(startTown, endTown, distance);
+            _adjacencyList.AddDirectedEdge(source, destination, length);
         }
 
-        public int GetDistanceOf(char startTown, char endTown)
+        public int GetLengthOf(char source, char destination)
         {
-            var distance = adjacencyList.GetWeightOf(startTown, endTown);
-            if (distance < 0)
+            var length = _adjacencyList.GetWeightOf(source, destination);
+            if (length < 0)
             {
-                throw new RailRoadSystemException(RailRoadSystemExceptionType.NoRouteExists, "NO SUCH ROUTE");
+                throw new GraphException(GraphExceptionType.NoRouteExists, "NO SUCH ROUTE");
             }
 
-            return distance;
+            return length;
         }
 
-        public int GetDistanceOfShortestRoute(char startTown, char endTown)
+        public int GetLengthOfShortestPath(char source, char destination)
         {
-            var allTowns = GetAllTowns();
-            CheckIfTownsAreValid(startTown, endTown, allTowns);
+            var allNodes = GetAllNodes();
+            CheckIfNodesAreValid(source, destination, allNodes);
 
-            var routeIsALoop = startTown == endTown;
+            var pathIsALoop = source == destination;
             
-            var route_distance = new Dictionary<char, int>(MAX_NUMBER_OF_TOWNS);
-            var previous = new Dictionary<char, char>(MAX_NUMBER_OF_TOWNS);
-            var remainingPaths = new MinPriorityQueue<PathFromSource>(MAX_NUMBER_OF_TOWNS);
-            var unknownTown = '-';
+            var minPathLengthFromSource = new Dictionary<char, int>(MAX_NUMBER_OF_NODES);
+            var previousNodeOnShortestPathFromSource = new Dictionary<char, char>(MAX_NUMBER_OF_NODES);
+            var remainingPaths = new MinPriorityQueue<PathFromSource>(MAX_NUMBER_OF_NODES);
+            var unknownNode = '-';
 
-            if (routeIsALoop)
+            if (pathIsALoop)
             {
-                endTown = DUMMY_TOWN_NAME;
-                allTowns.Add(endTown);
+                destination = DUMMY_NODE_NAME;
+                allNodes.Add(destination);
             }
 
-            foreach (var town in allTowns)
+            foreach (var node in allNodes)
             {
-                var initialDistance = INFINITY;
-                if (town == startTown)
+                var initialPathLength = INFINITY;
+                if (node == source)
                 {
-                    initialDistance = 0;
-                    remainingPaths.Enqueue(new PathFromSource(town, initialDistance));
+                    initialPathLength = 0;
+                    remainingPaths.Enqueue(new PathFromSource(node, initialPathLength));
                 }
-                route_distance.Add(town, initialDistance);
-                previous.Add(town, unknownTown);
+                minPathLengthFromSource.Add(node, initialPathLength);
+                previousNodeOnShortestPathFromSource.Add(node, unknownNode);
             }
 
             while (remainingPaths.Count != 0)
             {
                 var currentPath = remainingPaths.Dequeue();
-                var currentTown = currentPath.Stop;
-                if (currentPath.Length > route_distance[currentTown] 
-                    || (routeIsALoop && currentTown == endTown))
+                var currentNode = currentPath.Stop;
+                if (currentPath.Length > minPathLengthFromSource[currentNode] 
+                    || (pathIsALoop && currentNode == destination))
                 {
                     continue;
                 }
 
-                var neighbors = GetNeighborsOf(currentTown);
+                var neighbors = GetNeighborsOf(currentNode);
                 foreach (var neighbor in neighbors)
                 {
                     var currentNeighbor = neighbor;
-                    var currentDistance = GetDistanceOf(currentTown, currentNeighbor);
+                    var additionalPathLength = GetLengthOf(currentNode, currentNeighbor);
 
-                    if (routeIsALoop && currentNeighbor == startTown)
+                    if (pathIsALoop && currentNeighbor == source)
                     {
-                        currentNeighbor = endTown;
+                        currentNeighbor = destination;
                     }
 
-                    if (route_distance[currentTown] + currentDistance >= route_distance[currentNeighbor]) continue;
+                    if (minPathLengthFromSource[currentNode] + additionalPathLength >= minPathLengthFromSource[currentNeighbor]) continue;
 
-                    route_distance[currentNeighbor] = route_distance[currentTown] + currentDistance;
-                    previous[currentNeighbor] = currentTown;
-                    remainingPaths.Enqueue(new PathFromSource(currentNeighbor, route_distance[currentNeighbor]));
+                    minPathLengthFromSource[currentNeighbor] = minPathLengthFromSource[currentNode] + additionalPathLength;
+                    previousNodeOnShortestPathFromSource[currentNeighbor] = currentNode;
+                    remainingPaths.Enqueue(new PathFromSource(currentNeighbor, minPathLengthFromSource[currentNeighbor]));
                 }
 
             }
 
-            var distanceOfShortestRoute = route_distance[endTown];
-            CheckIfDistanceValueIsValid(distanceOfShortestRoute);
-            return distanceOfShortestRoute;
+            var lengthOfShortestPath = minPathLengthFromSource[destination];
+            CheckIfPathLengthIsValid(lengthOfShortestPath);
+            return lengthOfShortestPath;
         }
 
-        private static void CheckIfTownsAreValid(char startTown, char endTown, List<char> allTowns)
+        private static void CheckIfNodesAreValid(char startTown, char endTown, List<char> allTowns)
         {
             if (!allTowns.Contains(startTown) || !allTowns.Contains(endTown))
             {
-                throw new RailRoadSystemException(RailRoadSystemExceptionType.NoRouteExists, "NO SUCH ROUTE");
+                throw new GraphException(GraphExceptionType.NoRouteExists, "NO SUCH ROUTE");
             }
         }
 
-        private static void CheckIfDistanceValueIsValid(int distance)
+        private static void CheckIfPathLengthIsValid(int pathLength)
         {
-            if (distance == INFINITY)
+            if (pathLength == INFINITY)
             {
-                throw new RailRoadSystemException(RailRoadSystemExceptionType.NoRouteExists, "NO SUCH ROUTE");
+                throw new GraphException(GraphExceptionType.NoRouteExists, "NO SUCH ROUTE");
             }
         }
       
-        public List<char> GetAllTowns()
+        public List<char> GetAllNodes()
         {
-            return adjacencyList.GetAllVertices();
+            return _adjacencyList.GetAllVertices();
         }
-        public int GetNumberOfTripsWithMaxStops(char startTown, char endTown, int maxStops)
+        public int GetNumberOfPathsWithMaxStops(char source, char destination, int limit)
         {
-            return CountPathsWith(startTown
-                , endTown
-                , (currentPathLength) => (currentPathLength > 0 && currentPathLength <= maxStops)
-                , (currentPathLength) => (currentPathLength == maxStops)
+            return CountPathsWith(source
+                , destination
+                , (currentPathLength) => (currentPathLength > 0 && currentPathLength <= limit)
+                , (currentPathLength) => (currentPathLength == limit)
                 , (currentStop, neighbor) => 1);
         }
 
-        public int GetNumberOfTripsWithExactStops(char startTown, char endTown, int exactStops)
+        public int GetNumberOfPathsWithExactStops(char source, char destination, int limit)
         {
-            return CountPathsWith(startTown
-                , endTown
-                , (currentPathLength) => (currentPathLength == exactStops)
-                , (currentPathLength) => (currentPathLength == exactStops)
+            return CountPathsWith(source
+                , destination
+                , (currentPathLength) => (currentPathLength == limit)
+                , (currentPathLength) => (currentPathLength == limit)
                 , (currentStop, neighbor) => 1);
         }
 
-        public int GetNumberOfTripsWithMaxDistance(char startTown, char endTown, int maxDistance)
+        public int GetNumberOfPathsWithMaxDistance(char source, char destination, int limit)
         {
-            return CountPathsWith(startTown
-                , endTown
-                , (currentPathLength) => (currentPathLength > 0 && currentPathLength < maxDistance)
-                , (currentPathLength) => (currentPathLength >= maxDistance)
-                , GetDistanceOf);
+            return CountPathsWith(source
+                , destination
+                , (currentPathLength) => (currentPathLength > 0 && currentPathLength < limit)
+                , (currentPathLength) => (currentPathLength >= limit)
+                , GetLengthOf);
         }
 
         private int CountPathsWith(char source, char destination, Predicate<int> pathLengthConditionIsMet, Predicate<int> stopSearchConditionIsMet, Func<char, char, int> getPathLength)
         {
             var pathsFromSource = new Queue<PathFromSource>();
-            var tripCount = 0;
+            var pathCount = 0;
 
             pathsFromSource.Enqueue(new PathFromSource(source, 0));
 
@@ -173,14 +173,13 @@ namespace TrainInformation.Logic
 
                 if (currentStop == destination && pathLengthConditionIsMet(currentLength))
                 {
-                    tripCount++;
+                    pathCount++;
                 }
 
                 if (stopSearchConditionIsMet(currentLength))
                 {
                     continue;
                 }
-
 
                 var neighbors = GetNeighborsOf(currentStop);
                 foreach (var neighbor in neighbors)
@@ -189,7 +188,7 @@ namespace TrainInformation.Logic
                     pathsFromSource.Enqueue(new PathFromSource(neighbor, currentLength + additionalLength));
                 }
             }
-            return tripCount;
+            return pathCount;
         }
     }
 }

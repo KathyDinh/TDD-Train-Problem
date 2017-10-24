@@ -51,7 +51,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\RailroadSystem.cs" />
-    <Compile Include="Exceptions\RailRoadSystemException.cs" />
+    <Compile Include="Exceptions\GraphException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
