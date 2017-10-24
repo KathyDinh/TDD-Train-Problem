@@ -28,5 +28,19 @@ namespace TrainInformation.Test.Logic
             Assert.That(actual, Is.False);
         }
 
+        [TestCase('r', 'R')]
+        [TestCase('V', 'V')]
+        [TestCase('0', '0')]
+        public void GetHashCode_ShouldReturnHashCodeOfUpperCase(char oneChar, char upperCaseChar)
+        {
+            var expected = upperCaseChar.GetHashCode();
+
+            var target = new CaseInsensitiveCharEqualityComparer();
+            var actual = target.GetHashCode(oneChar);
+
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+
     }
 }
