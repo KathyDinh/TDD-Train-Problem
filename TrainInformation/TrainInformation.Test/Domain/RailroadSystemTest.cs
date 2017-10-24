@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using TrainInformation.Domain;
+using TrainInformation.Logic;
 
-namespace TrainInformation.Test
+namespace TrainInformation.Test.Domain
 {
     [TestFixture]
     class RailroadSystemTest

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization.Formatters;
+using TrainInformation.Data_Structures;
+using TrainInformation.Exceptions;
 
-namespace TrainInformation
+namespace TrainInformation.Logic
 {
     internal class Graph
     {

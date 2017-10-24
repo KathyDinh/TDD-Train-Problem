@@ -42,16 +42,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdjacencyList.cs" />
-    <Compile Include="CaseInsensitiveCharEqualityComparer.cs" />
-    <Compile Include="DirectedEdge.cs" />
-    <Compile Include="Graph.cs" />
-    <Compile Include="MinPriorityQueue.cs" />
-    <Compile Include="PathFromSource.cs" />
+    <Compile Include="Data Structures\AdjacencyList.cs" />
+    <Compile Include="Logic\CaseInsensitiveCharEqualityComparer.cs" />
+    <Compile Include="Data Structures\DirectedEdge.cs" />
+    <Compile Include="Logic\Graph.cs" />
+    <Compile Include="Data Structures\MinPriorityQueue.cs" />
+    <Compile Include="Data Structures\PathFromSource.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RailroadSystem.cs" />
-    <Compile Include="RailRoadSystemException.cs" />
+    <Compile Include="Domain\RailroadSystem.cs" />
+    <Compile Include="Exceptions\RailRoadSystemException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

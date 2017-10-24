@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TrainInformation
+namespace TrainInformation.Data_Structures
 {
     internal class MinPriorityQueue<T> where T : IComparable<T>
     {

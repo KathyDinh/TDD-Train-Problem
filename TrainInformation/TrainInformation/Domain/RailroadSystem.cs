@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using TrainInformation.Logic;
 
-namespace TrainInformation
+namespace TrainInformation.Domain
 {
     internal class RailroadSystem
     {

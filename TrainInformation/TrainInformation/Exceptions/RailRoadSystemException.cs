@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace TrainInformation
+﻿namespace TrainInformation.Exceptions
 {
-    internal class RailRoadSystemException : Exception
+    internal class RailRoadSystemException : System.Exception
     {
         public RailRoadSystemExceptionType exceptionType;
         public RailRoadSystemException(RailRoadSystemExceptionType exceptionType, string message): base(message)

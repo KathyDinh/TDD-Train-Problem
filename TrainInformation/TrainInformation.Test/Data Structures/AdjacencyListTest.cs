@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
+using TrainInformation.Data_Structures;
 
-namespace TrainInformation.Test
+namespace TrainInformation.Test.Data_Structures
 {   
     [TestFixture]
     class AdjacencyListTest

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TrainInformation
+namespace TrainInformation.Data_Structures
 {
     internal class PathFromSource : IComparable<PathFromSource>
     {

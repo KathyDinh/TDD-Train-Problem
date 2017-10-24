@@ -1,4 +1,4 @@
-﻿namespace TrainInformation
+﻿namespace TrainInformation.Data_Structures
 {
     internal class DirectedEdge
     {
