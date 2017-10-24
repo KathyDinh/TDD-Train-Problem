@@ -57,7 +57,7 @@ namespace TrainInformation
 
             foreach (var town in allTowns)
             {
-                int initialDistance = INFINITY;
+                var initialDistance = INFINITY;
                 if (town == startTown)
                 {
                     initialDistance = 0;
