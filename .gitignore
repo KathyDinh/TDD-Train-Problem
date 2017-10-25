@@ -6,3 +6,4 @@ bin/
 obj/
 packages/
 *.7z
+*.zip
